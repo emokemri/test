@@ -1,4 +1,4 @@
-﻿using AssemblyGame.Model;
+using AssemblyGame.Model;
 using AssemblyGame.ViewModel;
 using AssemblyGame.View;
 using System;
@@ -36,6 +36,7 @@ namespace AssemblyGame
             _gameViewModel = new GameViewModel(_gameModel);
             
             _gameViewModel.GameExit += new EventHandler(ViewModel_GameExit);
+            _gameViewModel.TaxChange += new EventHandler(ViewModel_SetTax);
             _gameViewModel.SpeedChange += new EventHandler<ChangeEventArgs>(ViewModel_SpeedChange);
             _gameViewModel.BuildingChoice += new EventHandler<ChangeEventArgs>(ViewModel_BuildingChoice);
             _view = new MenuWindow();
@@ -111,6 +112,11 @@ namespace AssemblyGame
             {
                 _gameModel.GameSpeed = Speed.Pause;
             }
+        }
+
+        private void ViewModel_SetTax(object? sender, EventArgs e)
+        {
+            _gameModel.Tax = _gameViewModel.Tax;
         }
 
         private void ViewModel_GameExit(object? sender, EventArgs e)
