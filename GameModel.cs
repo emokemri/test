@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
@@ -21,6 +21,7 @@ namespace AssemblyGame.Model
         private double _catastrophyProbability;
 
         private List<Residental> _allResidents;
+        public Double Tax { get; set; }
 
         public IArea this[int x, int y]
         {
