@@ -1,4 +1,4 @@
-﻿using AssemblyGame.Model;
+using AssemblyGame.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,7 +7,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Threading;
+//using GalaSoft.MvvmLight.Command;
 
 namespace AssemblyGame.ViewModel
 {
@@ -24,6 +26,19 @@ namespace AssemblyGame.ViewModel
         public string cityName;
         private int _wealth;
         private IArea buildingArea;
+        private Double _tax;
+        //public ICommand SetTax { get; private set; }
+
+
+        public Double Tax
+        {
+            get { return _tax; }
+            set
+            {
+                _tax = value;
+                OnPropertyChanged(nameof(Tax));
+            }
+        }
         public Int32 Width => 30;
         public Int32 Height => 30;
 
@@ -88,7 +103,11 @@ namespace AssemblyGame.ViewModel
         public DelegateCommand ExitGameCommand { get; private set; }
         public DelegateCommand BuildingChoiceCommand { get; private set; }
         public DelegateCommand SpeedChangeCommand { get; private set; }
+        public DelegateCommand? SetTax { get; set; }
         public ObservableCollection<GameField> Fields { get; set; }
+
+        
+
 
         #endregion
 
@@ -97,6 +116,8 @@ namespace AssemblyGame.ViewModel
         public event EventHandler? GameExit;
         public event EventHandler<ChangeEventArgs>? SpeedChange;
         public event EventHandler<ChangeEventArgs>? BuildingChoice;
+        public event EventHandler? TaxChange;
+
 
         #endregion
 
@@ -114,10 +135,18 @@ namespace AssemblyGame.ViewModel
             ExitGameCommand = new DelegateCommand(param => OnGameExit());
             SpeedChangeCommand = new DelegateCommand(param => OnSpeedChange(param));
             BuildingChoiceCommand = new DelegateCommand(param => OnBuildingChoice(param));
+            SetTax = new DelegateCommand(param => OnTaxChanged(param));
+            //SetTax = new RelayCommand(ExecuteSetTaxCommand);
 
             Fields = new ObservableCollection<GameField>();
 
             RefreshTable();
+        }
+
+        private void ExecuteSetTaxCommand(object obj)
+        {
+            // Update the _tax value in GameModel
+            _model.Tax = Tax;
         }
 
         #endregion
@@ -236,6 +265,11 @@ namespace AssemblyGame.ViewModel
             {
                 BuildingChoice(this, new ChangeEventArgs(param.ToString()));
             }
+        }
+
+        private void OnTaxChanged(object? param)
+        {
+            TaxChange?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
