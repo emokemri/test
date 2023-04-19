@@ -1,0 +1,16 @@
+﻿<Window x:Class="AssemblyGame.View.NewGameNameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AssemblyGame.View"
+        mc:Ignorable="d"
+        Title="AssemblyGame" Height="420" Width="300"  WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Label Content="Assembly" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="48" Width="280" RenderTransformOrigin="0.491,0.524" FontSize="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="LightGray"/>
+        <Label Content="Város neve" HorizontalAlignment="Center" Margin="0,90,0,0" VerticalAlignment="Top" Height="45" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" FontWeight="SemiBold"/>
+        <TextBox Name="NameBox" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="280" Height="52" FontSize="18" VerticalContentAlignment="Center" BorderBrush="{x:Null}" Background="#FFF6F6F6" Foreground="Black" TextAlignment="Center"/>
+        <Button Content="Játék indítása" HorizontalAlignment="Center" Margin="0,277,0,0" VerticalAlignment="Top" Height="59" Width="190" Click="OpenGameWindow" FontSize="18"/>
+
+    </Grid>
+</Window>

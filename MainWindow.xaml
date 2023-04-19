@@ -1,0 +1,193 @@
+﻿<Window x:Class="AssemblyGame.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AssemblyGame" xmlns:viewmodel="clr-namespace:AssemblyGame.ViewModel" 
+         d:DataContext="{d:DesignInstance Type=viewmodel:GameViewModel}"
+        mc:Ignorable="d"
+        Closing="MainWindow_Closing"
+        Title="AssemblyGame" Height="800" Width="1500" MinHeight="800" MinWidth="1500" WindowStartupLocation="CenterScreen">
+    <!--<Window.DataContext>
+        <local:MainWindow/>
+    </Window.DataContext>-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="12*"/>
+        </Grid.ColumnDefinitions>
+
+        <Menu Grid.Row="0" Grid.ColumnSpan="2">
+            <MenuItem Header="Menü" Click="BackToMenu"/>
+            <MenuItem Header="Beállítások">
+                <MenuItem Header="Játék szüneteltetése" Command="{Binding SpeedChangeCommand}" CommandParameter="Pause"/>
+                <MenuItem Header="Mentés" Click="SaveGame"/>
+                <MenuItem Header="Játék sebessége: ">
+                    <MenuItem Header="Lassú" Command="{Binding SpeedChangeCommand}" CommandParameter="Slow"/>
+                    <MenuItem Header="Normál" Command="{Binding SpeedChangeCommand}" CommandParameter="Normal"/>
+                    <MenuItem Header="Gyors" Command="{Binding SpeedChangeCommand}" CommandParameter="Fast"/>
+                </MenuItem>
+            </MenuItem>
+            <Button x:Name="Funds" Content="Kiadások" Click="Funds_Click"/>
+        </Menu>
+
+        <Grid  Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="6" Content="Zónák" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="25" FontWeight="SemiBold" Background="LightGray" Margin="5"/>
+            <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="6" Content="Kiszolgáló épületek" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="25" FontWeight="SemiBold" Background="LightGray" Margin="5"/>
+            <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="6" Content="Erdő és utak" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="25" FontWeight="SemiBold" Background="LightGray" Margin="5"/>
+            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="Lakó" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="LightBlue" Margin="5" Command="{Binding BuildingChoiceCommand}" CommandParameter="Residental"/>
+            <Button Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Content="Szolgáltatási" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="LightGreen" Margin="5" Command="{Binding BuildingChoiceCommand}" CommandParameter="Service"/>
+            <Button Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Content="Ipari" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="LightYellow" Margin="5" Command="{Binding BuildingChoiceCommand}" CommandParameter="Industrial"/>
+            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="Rendőrség" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="DarkBlue" Margin="5" Command="{Binding BuildingChoiceCommand}" CommandParameter="Police"/>
+            <Button Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="3" Content="Stadion" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Orange" Margin="5" Command="{Binding BuildingChoiceCommand}" CommandParameter="Stadium"/>
+            <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Content="Iskola" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Violet" Margin="5" Command="{Binding BuildingChoiceCommand}" CommandParameter="HighSchool"/>
+            <Button Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="3" Content="Egyetem" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Yellow" Margin="5" Command="{Binding BuildingChoiceCommand}" CommandParameter="University"/>
+            <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Content="Erdő" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Green" Margin="5,5,5,10" Command="{Binding BuildingChoiceCommand}" CommandParameter="Forest"/>
+            <Button Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="3" Content="Út" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Gray" Margin="5,5,5,10" Command="{Binding BuildingChoiceCommand}" CommandParameter="Road"/>
+        </Grid>
+
+
+        <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Fields}" >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="{Binding Height, UpdateSourceTrigger=PropertyChanged}" 
+                                 Columns="{Binding Width, UpdateSourceTrigger=PropertyChanged}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Command="{Binding StepGame}" CommandParameter="{Binding Number}" >
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding WhichBuilding}" Value="Empty">
+                                        <Setter Property="Background" Value="Pink"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding WhichBuilding}" Value="Residental">
+                                        <Setter Property="Background" Value="LightBlue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding WhichBuilding}" Value="Service">
+                                        <Setter Property="Background" Value="LightGreen"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding WhichBuilding}" Value="Industrial">
+                                        <Setter Property="Background" Value="LightYellow"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding WhichBuilding}" Value="Police">
+                                        <Setter Property="Background" Value="DarkBlue"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding WhichBuilding}" Value="Stadium">
+                                        <Setter Property="Background" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding WhichBuilding}" Value="HighSchool">
+                                        <Setter Property="Background" Value="Violet"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding WhichBuilding}" Value="University">
+                                        <Setter Property="Background" Value="Yellow"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding WhichBuilding}" Value="Forest">
+                                        <Setter Property="Background" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding WhichBuilding}" Value="Road">
+                                        <Setter Property="Background" Value="Gray"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Grid.Row" Value="{Binding X}"/>
+                    <Setter Property="Grid.Column" Value="{Binding Y}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="2">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <Separator Grid.Column="1"/>
+            <StatusBarItem Grid.Column="2">
+                <Label Content="Város neve: "/>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="3">
+                <Label Name="CityNameWindow" Content="{Binding CityName}"/>
+            </StatusBarItem>
+            <Separator Grid.Column="4"/>
+            <StatusBarItem Grid.Column="5">
+                <Label Content="Elégedettség: "></Label>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="6">
+                <Label Name="SatisfactionI" Content="{Binding SatisfactionIndex}"/>
+            </StatusBarItem>
+            <Separator Grid.Column="7"/>
+            <StatusBarItem Grid.Column="8">
+                <Label Content="Népesség: "/>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="9">
+                <Label Name="PopulationNumber" Content="{Binding Population}"/>
+            </StatusBarItem>
+            <Separator Grid.Column="10"/>
+            <StatusBarItem Grid.Column="11">
+                <Label Content="Vagyon: "/>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="12">
+                <Label Name="WealthN" Content="{Binding Wealth}"/>
+            </StatusBarItem>
+            <Separator Grid.Column="13"/>
+            <StatusBarItem Grid.Column="14">
+                <Label Content="Dátum: "/>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="15">
+                <Label Name="Date" Content="{Binding CurrentTime}"/>
+                <!--<TextBlock Text="{Binding CurrentTime}" />-->
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+
+</Window>

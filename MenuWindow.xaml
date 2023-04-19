@@ -1,0 +1,36 @@
+﻿<Window x:Class="AssemblyGame.View.MenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AssemblyGame.View"
+        mc:Ignorable="d"
+        Title="AssemblyGame" Height="420" Width="300" WindowStartupLocation="CenterScreen">
+
+
+    <Grid>
+        <Label Content="Assembly" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="57" Width="280" FontSize="25" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="LightGray"/>
+        <Button Content="Új játék indítása" HorizontalAlignment="Center"  Margin="0,118,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.691,-1.299" Height="66" Width="190"  FontSize="18"  Click="OpenWindow">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button Content="Játék betöltése" HorizontalAlignment="Center" Margin="0,202,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.691,-1.299" Height="66" Width="190"  FontSize="18" Command="{Binding LoadGameCommand}">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+        <Button Content="Kilépés" HorizontalAlignment="Center" Margin="0,283,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.691,-1.299" Height="66" Width="190"  FontSize="18" Command="{Binding ExitGameCommand}" Click="CloseButton_Click">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </Button.Resources>
+        </Button>
+
+    </Grid>
+</Window>
